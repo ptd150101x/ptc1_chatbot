@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from app.api.api_v1.api import api_router
 from app.api.openapi.api import router as openapi_router
@@ -12,24 +13,26 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_minio()
+    migrator = DatabaseMigrator(settings.get_database_url)
+    migrator.run_migrations()
+    logging.info("Startup event: MinIO initialized and migrations run.")
+    yield
+    logging.info("Shutdown event.")
+
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan
 )
 
 # Include routers
 app.include_router(api_router, prefix=settings.API_V1_STR)
 app.include_router(openapi_router, prefix="/openapi")
-
-
-@app.on_event("startup")
-async def startup_event():
-    # Initialize MinIO
-    init_minio()
-    # Run database migrations
-    migrator = DatabaseMigrator(settings.get_database_url)
-    migrator.run_migrations()
 
 
 @app.get("/")
@@ -43,3 +46,8 @@ async def health_check():
         "status": "healthy",
         "version": settings.VERSION,
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
