@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
 
+
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState("");
