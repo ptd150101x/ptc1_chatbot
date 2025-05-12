@@ -7,6 +7,9 @@ from app.core.config import settings
 from app.core.minio import init_minio
 from app.startup.migarate import DatabaseMigrator
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,6 +31,15 @@ app = FastAPI(
     version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     lifespan=lifespan
+)
+
+# Cấu hình CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cho phép tất cả origins trong môi trường phát triển
+    allow_credentials=True,
+    allow_methods=["*"],  # Cho phép tất cả methods
+    allow_headers=["*"],  # Cho phép tất cả headers
 )
 
 # Include routers

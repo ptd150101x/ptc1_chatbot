@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     # PostgreSQL settings
     POSTGRES_SERVER: str = os.getenv("POSTGRES_SERVER", "localhost")
     POSTGRES_PORT: int = int(os.getenv("POSTGRES_PORT", "5432"))
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "root")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "123")
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "postgres")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "abc")
     POSTGRES_DATABASE: str = os.getenv("POSTGRES_DATABASE", "chatbot")
     SQLALCHEMY_DATABASE_URI: Optional[str] = None
 

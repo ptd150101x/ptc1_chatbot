@@ -41,7 +41,6 @@ services:
       - app_network
     depends_on:
       - db
-      - chromadb
       - minio
     restart: on-failure
     deploy:
@@ -80,27 +79,13 @@ services:
         max-file: "3"
 
   db:
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
+    image: huanidz/pgvector_pgsearch:latest
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=ragwebui
-      - MYSQL_USER=ragwebui
-      - MYSQL_PASSWORD=ragwebui
-      - TZ=Asia/Shanghai
+      - POSTGRES_PASSWORD=123
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - app_network
-
-  chromadb:
-    image: chromadb/chroma:latest
-    ports:
-      - "8001:8000"
-    volumes:
-      - chroma_data:/chroma/chroma
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
 
@@ -119,8 +104,7 @@ services:
       - app_network
 
 volumes:
-  mysql_data:
-  chroma_data:
+  postgres_data:
   minio_data:
 
 networks:

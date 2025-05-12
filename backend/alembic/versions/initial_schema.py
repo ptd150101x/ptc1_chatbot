@@ -38,7 +38,7 @@ def upgrade() -> None:
         'knowledge_bases',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(255), nullable=False),
-        sa.Column('description', mysql.LONGTEXT(), nullable=True),
+        sa.Column('description', sa.TEXT(), nullable=True),
         sa.Column('user_id', sa.Integer(), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
@@ -72,7 +72,7 @@ def upgrade() -> None:
         sa.Column('metadata', sa.JSON(), nullable=True),
         sa.Column('hash', sa.String(64), nullable=False),
         sa.Column('created_at', sa.TIMESTAMP(), server_default=sa.text('CURRENT_TIMESTAMP')),
-        sa.Column('updated_at', sa.TIMESTAMP(), server_default=sa.text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')),
+        sa.Column('updated_at', sa.TIMESTAMP(), server_default=sa.text('CURRENT_TIMESTAMP')),
         sa.PrimaryKeyConstraint('id')
     )
 
@@ -104,7 +104,7 @@ def upgrade() -> None:
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('chat_id', sa.Integer(), nullable=False),
         sa.Column('role', sa.String(50), nullable=False),
-        sa.Column('content', mysql.LONGTEXT(), nullable=False),
+        sa.Column('content', sa.Text(), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(['chat_id'], ['chats.id'], ),

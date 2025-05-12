@@ -59,8 +59,10 @@ def upgrade() -> None:
                existing_type=mysql.DATETIME(),
                nullable=True)
     op.create_index(op.f('ix_processing_tasks_id'), 'processing_tasks', ['id'], unique=False)
-    op.drop_index('email', table_name='users')
-    op.drop_index('username', table_name='users')
+    # Drop original unique constraints (which create indexes with default names in Postgres)
+    op.drop_constraint('users_email_key', 'users', type_='unique')
+    op.drop_constraint('users_username_key', 'users', type_='unique')
+    # Create new indexes with op.f() names (already in auto-generated code)
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
@@ -72,8 +74,9 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_users_username'), table_name='users')
     op.drop_index(op.f('ix_users_id'), table_name='users')
     op.drop_index(op.f('ix_users_email'), table_name='users')
-    op.create_index('username', 'users', ['username'], unique=True)
-    op.create_index('email', 'users', ['email'], unique=True)
+    # Recreate original unique constraints
+    op.create_unique_constraint('users_username_key', 'users', ['username'])
+    op.create_unique_constraint('users_email_key', 'users', ['email'])
     op.drop_index(op.f('ix_processing_tasks_id'), table_name='processing_tasks')
     op.alter_column('processing_tasks', 'updated_at',
                existing_type=mysql.DATETIME(),
