@@ -8,6 +8,8 @@ import { api, ApiError } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 import { Plus } from "lucide-react";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface KnowledgeBase {
   id: number;
   name: string;
@@ -30,7 +32,7 @@ export default function NewChatPage() {
 
   const fetchKnowledgeBases = async () => {
     try {
-      const data = await api.get("/api/knowledge-base");
+      const data = await api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base`);
       setKnowledgeBases(data);
       setIsLoading(false);
     } catch (error) {
@@ -56,7 +58,7 @@ export default function NewChatPage() {
     setIsSubmitting(true);
 
     try {
-      const data = await api.post("/api/chat", {
+      const data = await api.post(`${NEXT_PUBLIC_API_URL}/api/chat`, {
         title,
         knowledge_base_ids: [selectedKB],
       });

@@ -62,7 +62,7 @@ services:
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost/api
+      - NEXT_PUBLIC_API_URL=http://backend:8000
     ports:
       - "3000:3000"
     volumes:
@@ -81,7 +81,7 @@ services:
   db:
     image: huanidz/pgvector_pgsearch:latest
     environment:
-      - POSTGRES_PASSWORD=123
+      - POSTGRES_PASSWORD=abc
     ports:
       - "5432:5432"
     volumes:
@@ -103,9 +103,20 @@ services:
     networks:
       - app_network
 
+
+  chromadb:
+    image: chromadb/chroma:1.0.8
+    ports:
+      - "8002:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    networks:
+      - app_network
+
 volumes:
   postgres_data:
   minio_data:
+  chroma_data:
 
 networks:
   app_network:

@@ -16,6 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface KnowledgeBase {
   id: number;
   name: string;
@@ -35,7 +37,7 @@ export default function TestPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchKnowledgeBase = async () => {
       try {
-        const data = await api.get(`/api/knowledge-base/${params.id}`);
+        const data = await api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base/${params.id}`);
         setKnowledgeBase(data);
       } catch (error) {
         console.error("Failed to fetch knowledge base:", error);
@@ -64,7 +66,7 @@ export default function TestPage({ params }: { params: { id: string } }) {
 
     setLoading(true);
     try {
-      const data = await api.post("/api/knowledge-base/test-retrieval", {
+      const data = await api.post(`${NEXT_PUBLIC_API_URL}/api/knowledge-base/test-retrieval`, {
         query,
         kb_id: parseInt(params.id),
         top_k: parseInt(topK),
@@ -92,7 +94,7 @@ export default function TestPage({ params }: { params: { id: string } }) {
         <div className="max-w-6xl mx-auto py-12 px-6">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-              知识库检索测试
+              Test Retrieval
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
               <span className="font-semibold text-foreground">
@@ -127,11 +129,11 @@ export default function TestPage({ params }: { params: { id: string } }) {
                     {loading ? (
                       <span className="flex items-center">
                         <Sparkles className="animate-spin mr-2 h-4 w-4" />
-                        搜索中...
+                        Searching...
                       </span>
                     ) : (
                       <span className="flex items-center">
-                        搜索
+                        Search
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </span>
                     )}
@@ -157,7 +159,7 @@ export default function TestPage({ params }: { params: { id: string } }) {
             <div className="mt-12 space-y-8">
               <h2 className="text-2xl font-semibold flex items-center gap-2">
                 <Sparkles className="h-6 w-6 text-primary" />
-                搜索结果
+                Search Results
               </h2>
               <div className="grid gap-6">
                 {results.map((result, index) => (

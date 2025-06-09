@@ -9,6 +9,8 @@ import { api, ApiError } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 import { Answer } from "@/components/chat/answer";
 
+
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 interface Message {
   id: string;
   role: "assistant" | "user" | "system" | "data";
@@ -57,7 +59,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
     isLoading,
     setMessages,
   } = useChat({
-    api: `/api/chat/${params.id}/messages`,
+    api: `${NEXT_PUBLIC_API_URL}/api/chat/${params.id}/messages`,
     headers: {
       Authorization: `Bearer ${
         typeof window !== "undefined"
@@ -82,7 +84,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
 
   const fetchChat = async () => {
     try {
-      const data: Chat = await api.get(`/api/chat/${params.id}`);
+      const data: Chat = await api.get(`${NEXT_PUBLIC_API_URL}/api/chat/${params.id}`);
       const formattedMessages = data.messages.map((msg) => {
         if (msg.role !== "assistant" || !msg.content)
           return {

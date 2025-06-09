@@ -6,6 +6,8 @@ import DashboardLayout from "@/components/layout/dashboard-layout";
 import { api, ApiError } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface KnowledgeBase {
   id: number;
   name: string;
@@ -30,7 +32,7 @@ export default function NewKnowledgeBasePage() {
       const name = formData.get("name") as string;
       const description = formData.get("description") as string;
 
-      const data = await api.post("/api/knowledge-base", {
+      const data = await api.post(`${NEXT_PUBLIC_API_URL}/api/knowledge-base`, {
         name,
         description,
       });

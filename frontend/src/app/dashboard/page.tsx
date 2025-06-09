@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+console.log(NEXT_PUBLIC_API_URL);
 interface KnowledgeBase {
   id: number;
   name: string;
@@ -39,8 +41,8 @@ export default function DashboardPage() {
     const fetchStats = async () => {
       try {
         const [kbData, chatData] = await Promise.all([
-          api.get("/api/knowledge-base"),
-          api.get("/api/chat"),
+          api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base`),
+          api.get(`${NEXT_PUBLIC_API_URL}/api/chat`),
         ]);
 
         setStats({

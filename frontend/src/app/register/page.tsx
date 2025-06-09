@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
 
-
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+console.log(NEXT_PUBLIC_API_URL);
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -89,7 +90,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await api.post("/api/auth/register", {
+      await api.post(`${NEXT_PUBLIC_API_URL}/api/auth/register`, {
         username,
         email,
         password,

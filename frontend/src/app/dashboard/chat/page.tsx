@@ -7,6 +7,8 @@ import DashboardLayout from "@/components/layout/dashboard-layout";
 import { api, ApiError } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface Chat {
   id: number;
   title: string;
@@ -33,7 +35,7 @@ export default function ChatPage() {
 
   const fetchChats = async () => {
     try {
-      const data = await api.get("/api/chat");
+      const data = await api.get(`${NEXT_PUBLIC_API_URL}/api/chat`);
       setChats(data);
     } catch (error) {
       console.error("Failed to fetch chats:", error);
@@ -50,7 +52,7 @@ export default function ChatPage() {
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure you want to delete this chat?")) return;
     try {
-      await api.delete(`/api/chat/${id}`);
+      await api.delete(`${NEXT_PUBLIC_API_URL}/api/chat/${id}`);
       setChats((prev) => prev.filter((chat) => chat.id !== id));
       toast({
         title: "Success",

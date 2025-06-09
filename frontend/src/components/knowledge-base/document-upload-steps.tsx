@@ -27,6 +27,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface DocumentUploadStepsProps {
   knowledgeBaseId: number;
   onComplete?: () => void;
@@ -146,7 +148,7 @@ export function DocumentUploadSteps({
       });
 
       const data = (await api.post(
-        `/api/knowledge-base/${knowledgeBaseId}/documents/upload`,
+        `${NEXT_PUBLIC_API_URL}/api/knowledge-base/${knowledgeBaseId}/documents/upload`,
         formData,
         {
           headers: {},
@@ -207,7 +209,7 @@ export function DocumentUploadSteps({
     setIsLoading(true);
     try {
       const data = await api.post(
-        `/api/knowledge-base/${knowledgeBaseId}/documents/preview`,
+        `${NEXT_PUBLIC_API_URL}/api/knowledge-base/${knowledgeBaseId}/documents/preview`,
         {
           document_ids: [selectedDocumentId],
           chunk_size: chunkSize,
@@ -252,7 +254,7 @@ export function DocumentUploadSteps({
     setIsLoading(true);
     try {
       const data = (await api.post(
-        `/api/knowledge-base/${knowledgeBaseId}/documents/process`,
+        `${NEXT_PUBLIC_API_URL}/api/knowledge-base/${knowledgeBaseId}/documents/process`,
         resultsToProcess
       )) as TaskResponse;
 
@@ -287,7 +289,7 @@ export function DocumentUploadSteps({
     const poll = async () => {
       try {
         const response = (await api.get(
-          `/api/knowledge-base/${knowledgeBaseId}/documents/tasks?task_ids=${taskIds.join(
+          `${NEXT_PUBLIC_API_URL}/api/knowledge-base/${knowledgeBaseId}/documents/tasks?task_ids=${taskIds.join(
             ","
           )}`
         )) as TaskStatusResponse;

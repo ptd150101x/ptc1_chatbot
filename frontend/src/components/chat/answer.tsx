@@ -19,6 +19,8 @@ import rehypeHighlight from "rehype-highlight";
 import { api } from "@/lib/api";
 import { FileIcon } from "react-file-icon";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface Citation {
   id: number;
   text: string;
@@ -66,8 +68,8 @@ export const Answer: FC<{
 
         try {
           const [kb, doc] = await Promise.all([
-            api.get(`/api/knowledge-base/${kb_id}`),
-            api.get(`/api/knowledge-base/${kb_id}/documents/${document_id}`),
+            api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base/${kb_id}`),
+            api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base/${kb_id}/documents/${document_id}`),
           ]);
 
           infoMap[key] = {

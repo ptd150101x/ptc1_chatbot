@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface LoginResponse {
   access_token: string;
   token_type: string;
@@ -29,7 +31,7 @@ export default function LoginPage() {
       formUrlEncoded.append("username", username as string);
       formUrlEncoded.append("password", password as string);
 
-      const data = await api.post("/api/auth/token", formUrlEncoded, {
+      const data = await api.post(`${NEXT_PUBLIC_API_URL}/api/auth/token`, formUrlEncoded, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },

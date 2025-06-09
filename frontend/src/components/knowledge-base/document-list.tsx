@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/table";
 import { FileText } from "lucide-react";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface Document {
   id: number;
   file_name: string;
@@ -48,7 +50,7 @@ export function DocumentList({ knowledgeBaseId }: DocumentListProps) {
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const data = await api.get(`/api/knowledge-base/${knowledgeBaseId}`);
+        const data = await api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base/${knowledgeBaseId}`);
         setDocuments(data.documents);
       } catch (error) {
         if (error instanceof ApiError) {

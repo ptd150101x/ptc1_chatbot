@@ -8,6 +8,8 @@ import DashboardLayout from "@/components/layout/dashboard-layout";
 import { api, ApiError } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 interface KnowledgeBase {
   id: number;
   name: string;
@@ -38,7 +40,7 @@ export default function KnowledgeBasePage() {
 
   const fetchKnowledgeBases = async () => {
     try {
-      const data = await api.get("/api/knowledge-base");
+      const data = await api.get(`${NEXT_PUBLIC_API_URL}/api/knowledge-base`);
       setKnowledgeBases(data);
     } catch (error) {
       console.error("Failed to fetch knowledge bases:", error);
@@ -58,7 +60,7 @@ export default function KnowledgeBasePage() {
     if (!confirm("Are you sure you want to delete this knowledge base?"))
       return;
     try {
-      await api.delete(`/api/knowledge-base/${id}`);
+      await api.delete(`${NEXT_PUBLIC_API_URL}/api/knowledge-base/${id}`);
       setKnowledgeBases((prev) => prev.filter((kb) => kb.id !== id));
       toast({
         title: "Success",
