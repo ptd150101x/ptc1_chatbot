@@ -2,15 +2,12 @@ from typing import Dict, Type, Any
 from langchain_core.embeddings import Embeddings
 
 from .base import BaseVectorStore
-from .chroma import ChromaVectorStore
-from .qdrant import QdrantStore
-
+from .postgres import PostgresVectorStore
 class VectorStoreFactory:
     """Factory for creating vector store instances"""
     
     _stores: Dict[str, Type[BaseVectorStore]] = {
-        'chroma': ChromaVectorStore,
-        'qdrant': QdrantStore
+        'psql': PostgresVectorStore,
     }
     
     @classmethod
