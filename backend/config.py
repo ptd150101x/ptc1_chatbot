@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     OPENAI_EMBEDDINGS_MODEL: str = os.getenv("OPENAI_EMBEDDINGS_MODEL", "text-embedding-ada-002")
     
     # Vector Store settings
-    VECTOR_STORE_TYPE: str = os.getenv("VECTOR_STORE_TYPE", "chroma")
+    VECTOR_STORE_TYPE: str = os.getenv("VECTOR_STORE_TYPE", "psql")
 
     # Chroma DB settings
     CHROMA_DB_HOST: str = os.getenv("CHROMA_DB_HOST", "http://localhost:8002")

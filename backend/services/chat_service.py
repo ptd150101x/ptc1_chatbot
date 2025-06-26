@@ -11,12 +11,23 @@ from config import settings
 from models.chat import Message
 from models.knowledge import KnowledgeBase, Document
 from langchain.globals import set_verbose, set_debug
-from services.vector_store import VectorStoreFactory
+from services.vector_store.postgres import PostgresVectorStore
 from services.embedding.embedding_factory import EmbeddingsFactory
 from services.llm.llm_factory import LLMFactory
 
 set_verbose(True)
 set_debug(True)
+
+def get_collection_count_postgres(vector_store, collection_name: str) -> int:
+    """Get collection count for PostgreSQL vector store"""
+    try:
+        # For PostgreSQL, we can try to count documents using similarity search
+        # This is an approximation method
+        results = vector_store._store.similarity_search("", k=10000)
+        return len(results)
+    except Exception as e:
+        print(f"Warning: Could not get collection count for PostgreSQL: {e}")
+        return 0
 
 async def generate_response(
     query: str,
@@ -54,18 +65,22 @@ async def generate_response(
         # Initialize embeddings
         embeddings = EmbeddingsFactory.create()
         
-        # Create a vector store for each knowledge base
+        # Create a PostgreSQL vector store for each knowledge base
         vector_stores = []
         for kb in knowledge_bases:
             documents = db.query(Document).filter(Document.knowledge_base_id == kb.id).all()
             if documents:
-                # Use the factory to create the appropriate vector store
-                vector_store = VectorStoreFactory.create(
-                    store_type=settings.VECTOR_STORE_TYPE,  # 'chroma' or other supported types
+                # Create PostgreSQL vector store
+                vector_store = PostgresVectorStore(
                     collection_name=f"kb_{kb.id}",
                     embedding_function=embeddings,
                 )
-                print(f"Collection {f'kb_{kb.id}'} count:", vector_store._store._collection.count())
+                
+                # Get collection count for PostgreSQL
+                collection_name = f"kb_{kb.id}"
+                count = get_collection_count_postgres(vector_store, collection_name)
+                print(f"PostgreSQL Collection {collection_name} count: {count}")
+                
                 vector_stores.append(vector_store)
         
         if not vector_stores:
@@ -124,7 +139,7 @@ async def generate_response(
             ("human", "{input}")
         ])
 
-        # 修改 create_stuff_documents_chain 来自定义 context 格式
+        # Create document prompt template
         document_prompt = PromptTemplate.from_template("\n\n- {page_content}\n\n")
 
         # Create QA chain
@@ -166,15 +181,15 @@ async def generate_response(
                     }
                     serializable_context.append(serializable_doc)
                 
-                # 先替换引号，再序列化
+                # Escape quotes and serialize
                 escaped_context = json.dumps({
                     "context": serializable_context
                 })
 
-                # 转成 base64
+                # Encode to base64
                 base64_context = base64.b64encode(escaped_context.encode()).decode()
 
-                # 连接符号
+                # Separator
                 separator = "__LLM_RESPONSE__"
                 
                 yield f'0:"{base64_context}{separator}"\n'
