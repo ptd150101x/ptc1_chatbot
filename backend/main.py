@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from config import settings
 from router.auth import router as auth_router
 from router.knowledge_base import router as knowledge_base_router
+from router.chat import router as chat_router
 import logging
 from contextlib import asynccontextmanager
 from migrate import DatabaseMigrator
@@ -43,6 +44,8 @@ app.add_middleware(
 # Bao gồm routers
 app.include_router(auth_router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
 app.include_router(knowledge_base_router, prefix=f"{settings.API_V1_STR}/knowledge-base", tags=["knowledge-base"])
+app.include_router(chat_router, prefix=f"{settings.API_V1_STR}/chat", tags=["chat"])
+
 @app.get("/")
 def root():
     return {"message": "Chào mừng đến với API của ứng dụng chatbot"}
