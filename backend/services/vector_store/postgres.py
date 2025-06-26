@@ -15,7 +15,7 @@ class PostgresVectorStore(BaseVectorStore):
         
         self._store = PGVector(
             collection_name=collection_name,
-            embedding_function=embedding_function,  # Sử dụng embedding_function thay vì embeddings
+            embeddings=embedding_function,  # Sử dụng embedding_function thay vì embeddings
             connection=connection_string,  # Sử dụng connection thay vì connection_string
             **kwargs
         )

@@ -44,10 +44,13 @@ class Settings(BaseSettings):
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
     MINIO_BUCKET_NAME: str = os.getenv("MINIO_BUCKET_NAME", "documents")
 
+    # Chat Provider settings
+    CHAT_PROVIDER: str = os.getenv("CHAT_PROVIDER", "openai")
+
     # OpenAI settings
-    OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "your-openai-api-key-here")
-    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4")
+    OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://localhost:8008/v1")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "api-key")
+    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "AITeamVN/Vi-Qwen2-3B-RAG")
     OPENAI_EMBEDDINGS_MODEL: str = os.getenv("OPENAI_EMBEDDINGS_MODEL", "text-embedding-ada-002")
     
     # Vector Store settings
