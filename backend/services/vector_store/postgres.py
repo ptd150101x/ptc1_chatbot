@@ -1,7 +1,7 @@
 from typing import List, Any
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
-from langchain_community.vectorstores import PGVector
+from langchain_postgres import PGVector
 from config import settings
 
 from .base import BaseVectorStore
@@ -15,8 +15,8 @@ class PostgresVectorStore(BaseVectorStore):
         
         self._store = PGVector(
             collection_name=collection_name,
-            embeddings=embedding_function,
-            connection_string=connection_string,
+            embedding_function=embedding_function,  # Sử dụng embedding_function thay vì embeddings
+            connection=connection_string,  # Sử dụng connection thay vì connection_string
             **kwargs
         )
     
