@@ -1,9 +1,9 @@
 import os
 from typing import List, Optional
-
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-
+load_dotenv(override=True)
 class Settings(BaseSettings):
     PROJECT_NAME: str = "RAG Web UI"  # Project name
     VERSION: str = "0.1.0"  # Project version

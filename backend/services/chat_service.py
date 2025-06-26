@@ -18,16 +18,11 @@ from services.llm.llm_factory import LLMFactory
 set_verbose(True)
 set_debug(True)
 
-def get_collection_count_postgres(vector_store, collection_name: str) -> int:
-    """Get collection count for PostgreSQL vector store"""
-    try:
-        # For PostgreSQL, we can try to count documents using similarity search
-        # This is an approximation method
-        results = vector_store._store.similarity_search("", k=10000)
-        return len(results)
-    except Exception as e:
-        print(f"Warning: Could not get collection count for PostgreSQL: {e}")
-        return 0
+
+
+def get_collection_count_postgres(db: Session, knowledge_base_id: int) -> int:
+    """Get document count for a knowledge base in PostgreSQL"""
+    return db.query(Document).filter(Document.knowledge_base_id == knowledge_base_id).count()
 
 async def generate_response(
     query: str,
@@ -76,11 +71,8 @@ async def generate_response(
                     embedding_function=embeddings,
                 )
                 
-                # Get collection count for PostgreSQL
-                collection_name = f"kb_{kb.id}"
-                count = get_collection_count_postgres(vector_store, collection_name)
-                print(f"PostgreSQL Collection {collection_name} count: {count}")
-                
+                count = get_collection_count_postgres(db, kb.id)
+                print(f"PostgreSQL Collection kb_{kb.id} count: {count}")
                 vector_stores.append(vector_store)
         
         if not vector_stores:
