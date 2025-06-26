@@ -113,7 +113,7 @@ async def generate_response(
         
         # Create history aware retriever
         history_aware_retriever = create_history_aware_retriever(
-            llm, 
+            llm,
             retriever,
             contextualize_q_prompt
         )

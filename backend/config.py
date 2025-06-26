@@ -30,9 +30,6 @@ class Settings(BaseSettings):
 
 
 
-    # Embeddings settings
-    EMBEDDINGS_PROVIDER: str = os.getenv("EMBEDDINGS_PROVIDER", "openai")
-
     # JWT settings
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here")
     ALGORITHM: str = "HS256"
@@ -44,6 +41,19 @@ class Settings(BaseSettings):
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
     MINIO_BUCKET_NAME: str = os.getenv("MINIO_BUCKET_NAME", "documents")
 
+
+
+
+    # FLagEmbedding settings
+    EMBEDDINGS_PROVIDER: str = os.getenv("EMBEDDINGS_PROVIDER", "flag")
+    FLAG_EMBEDDINGS_MODEL: str = os.getenv("FLAG_EMBEDDINGS_MODEL", "BAAI/bge-m3")
+    FLAG_EMBEDDINGS_USE_FP16: bool = os.getenv("FLAG_EMBEDDINGS_USE_FP16", "true").lower() == "true"
+    FLAG_EMBEDDINGS_DEVICE: Optional[str] = os.getenv("FLAG_EMBEDDINGS_DEVICE", None)
+    FLAG_EMBEDDINGS_BATCH_SIZE: int = int(os.getenv("FLAG_EMBEDDINGS_BATCH_SIZE", "64"))
+    FLAG_EMBEDDINGS_MAX_LENGTH: int = int(os.getenv("FLAG_EMBEDDINGS_MAX_LENGTH", "8192"))
+    
+    
+    
     # Chat Provider settings
     CHAT_PROVIDER: str = os.getenv("CHAT_PROVIDER", "openai")
 
@@ -51,7 +61,6 @@ class Settings(BaseSettings):
     OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://localhost:8008/v1")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "api-key")
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "AITeamVN/Vi-Qwen2-3B-RAG")
-    OPENAI_EMBEDDINGS_MODEL: str = os.getenv("OPENAI_EMBEDDINGS_MODEL", "text-embedding-ada-002")
     
     # Vector Store settings
     VECTOR_STORE_TYPE: str = os.getenv("VECTOR_STORE_TYPE", "psql")

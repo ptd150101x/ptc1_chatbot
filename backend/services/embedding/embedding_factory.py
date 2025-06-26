@@ -3,7 +3,9 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_ollama import OllamaEmbeddings
 from langchain_community.embeddings import DashScopeEmbeddings
 # If you plan on adding other embeddings, import them here
-# from some_other_module import AnotherEmbeddingClass
+from flag_embedding import FlagEmbeddings
+
+
 
 
 class EmbeddingsFactory:
@@ -33,7 +35,13 @@ class EmbeddingsFactory:
             )
 
         # Extend with other providers:
-        # elif embeddings_provider == "another_provider":
-        #     return AnotherEmbeddingClass(...)
+        elif embeddings_provider == "flag":
+            return FlagEmbeddings(
+                model_name=getattr(settings, 'FLAG_EMBEDDINGS_MODEL', 'BAAI/bge-m3'),
+                use_fp16=getattr(settings, 'FLAG_EMBEDDINGS_USE_FP16', True),
+                device=getattr(settings, 'FLAG_EMBEDDINGS_DEVICE', None),
+                batch_size=getattr(settings, 'FLAG_EMBEDDINGS_BATCH_SIZE', 64),
+                max_length=getattr(settings, 'FLAG_EMBEDDINGS_MAX_LENGTH', 8192)
+            )
         else:
             raise ValueError(f"Unsupported embeddings provider: {embeddings_provider}")
