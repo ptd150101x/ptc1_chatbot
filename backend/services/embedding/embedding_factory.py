@@ -3,7 +3,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_ollama import OllamaEmbeddings
 from langchain_community.embeddings import DashScopeEmbeddings
 # If you plan on adding other embeddings, import them here
-from flag_embedding import FlagEmbeddings
+from .flag_embedding import FlagEmbeddings
 
 
 

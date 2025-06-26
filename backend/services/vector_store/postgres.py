@@ -11,7 +11,11 @@ class PostgresVectorStore(BaseVectorStore):
     
     def __init__(self, collection_name: str, embedding_function: Embeddings, **kwargs):
         """Initialize PostgreSQL vector store"""
-        connection_string = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+        # Sử dụng async connection string
+        connection_string = (
+            f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}"
+            f"@{settings.POSTGRES_HOST}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+        )
         
         self._store = PGVector(
             collection_name=collection_name,
